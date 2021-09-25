@@ -11,6 +11,7 @@ void standard_algorithm(int **A, int **B, int **C, int n){
 	for (int i = 0; i < n; i++){
 		for (int j = 0; j < n; j++){
 			C[i][j] = 0;
+			addition--;
 			for (int k = 0; k < n; k++){
 				C[i][j] += A[i][k] * B[k][j];
 				multiplication++;
@@ -18,6 +19,15 @@ void standard_algorithm(int **A, int **B, int **C, int n){
 			}
 		}
 	}
+}
+
+void divide_and_conquer_algorithm(int **A, int **B, int **C, int n){
+
+}
+
+
+void strassen_algorithm(int **A, int **B, int **C, int n){
+
 }
 
 void print_matrix(int **A, int n){
@@ -41,33 +51,34 @@ void print_result(int **A, int **B, int **C, int n){
 	printf("The number of addition : %d\n", addition);
 }
 
-void init(int **A, int n){
-	A = (int **)malloc(sizeof(int *) * n);
+int **create_matrix(int n){
+	int **A = (int **)malloc(sizeof(int *) * n);
 	for (int i = 0; i < n; i++)
 		A[i] = (int *)malloc(sizeof(int) * n);
-	printf("init finish\n");
+	return A;
 }
 
-void rand_fill(int **A, int n){
+void rand_fill(int **A, int **B, int n){
 	srand(time(NULL));
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
+	for (int i = 0; i < n; i++){
+		for (int j = 0; j < n; j++){
 			A[i][j] = rand()%1000;
+			B[i][j] = rand()%1000;
+		}
+	}
 }
 
 int main(){
 	int **A, **B, **C;
 
-	init(A, size);
-	init(B, size);
-	init(C, size);
 	// 4x4 matrix
+	printf("===== 4x4 matrix =====\n");
 	size = 4;
-	rand_fill(A, size);	// rand()%1000
-	rand_fill(B, size);
+	A = create_matrix(size);
+	B = create_matrix(size);
+	C = create_matrix(size);
 
-	printf("helloo==================\n");
-	print_matrix(A, size);
+	rand_fill(A, B, size);
 
 	multiplication = 0;
 	subtraction = 0;
@@ -75,8 +86,19 @@ int main(){
 	printf("===== standard algorithm =====\n");
 	standard_algorithm(A, B, C, size);
 	print_result(A, B, C, size);
-//	printf("The number of multiplication : %d\n", multiplication);
-//	printf("The number of subtraction : %d\n", subtraction);
-//	printf("The number of addition : %d\n", addition);
+
+	multiplication = 0;
+	subtraction = 0;
+	addition = 0;
+	printf("===== divide-and-conquer algorithm =====\n");
+	divide_and_conquer_algorithm(A, B, C, size);
+	print_result(A, B, C, size);
+
+	multiplication = 0;
+	subtraction = 0;
+	addition = 0;
+	printf("===== strassen algorithm =====\n");
+	strassen_algorithm(A, B, C, size);
+	print_result(A, B, C, size);
 
 }
