@@ -15,9 +15,12 @@ int **create_matrix(int n){
 }
 
 void free_matrix(int **A, int n){
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++){
 		free(A[i]);
+		A[i] = NULL;
+	}
 	free(A);
+	A = NULL;
 }
 
 void rand_fill(int **A, int **B, int n){
@@ -33,7 +36,7 @@ void rand_fill(int **A, int **B, int n){
 void print_matrix(int **A, int n){
 	for (int i = 0; i < n; i++){
 		for (int j = 0; j < n; j++)
-			printf("%d ", A[i][j]);
+			printf("%d\t", A[i][j]);
 		printf("\n");
 	}
 	printf("\n");
@@ -48,6 +51,8 @@ int **add_matrix(int **A, int **B, int n){
 			addition++;
 		}
 	}
+	free_matrix(A, n);
+	free_matrix(B, n);
 	return C;
 }
 
@@ -113,6 +118,7 @@ int **divide_and_conquer_algorithm(int **A, int **B, int n){
 			}
 		}
 
+		/*
 		if (n > 2){
 			printf("Partial matrix of C\n");
 			printf("C11\n");
@@ -124,6 +130,7 @@ int **divide_and_conquer_algorithm(int **A, int **B, int n){
 			printf("C22\n");
 			print_matrix(C22, n / 2);
 		}
+		*/
 
 		free_matrix(A11, n / 2);
 		free_matrix(A12, n / 2);
@@ -168,30 +175,34 @@ int main(){
 	printf("===== 4x4 matrix =====\n");
 	A = create_matrix(size);
 	B = create_matrix(size);
-//	C = create_matrix(size);
 
 	rand_fill(A, B, size);
 
 	multiplication = 0;
 	subtraction = 0;
 	addition = 0;
-	printf("===== standard algorithm =====\n");
+	printf("\n===== standard algorithm =====\n");
 	C1 = standard_algorithm(A, B, size);
 	print_result(A, B, C1, size);
 
 	multiplication = 0;
 	subtraction = 0;
 	addition = 0;
-	printf("===== divide-and-conquer algorithm =====\n");
+	printf("\n===== divide-and-conquer algorithm =====\n");
 	C2 = divide_and_conquer_algorithm(A, B, size);
 	print_result(A, B, C2, size);
 
 	multiplication = 0;
 	subtraction = 0;
 	addition = 0;
-	printf("===== strassen algorithm =====\n");
+	printf("\n===== strassen algorithm =====\n");
 //	strassen_algorithm(A, B, C, size);
 //	print_result(A, B, C, size);
+
+	free_matrix(A, size);
+	free_matrix(B, size);
+	free_matrix(C1, size);
+	free_matrix(C2, size);
 
 
 	// 8x8 matrix
@@ -199,28 +210,32 @@ int main(){
 	printf("\n===== 8x8 matrix =====\n");
 	A = create_matrix(size);
 	B = create_matrix(size);
-//	C = create_matrix(size);
 
 	rand_fill(A, B, size);
 
 	multiplication = 0;
 	subtraction = 0;
 	addition = 0;
-	printf("===== standard algorithm =====\n");
+	printf("\n===== standard algorithm =====\n");
 	C1 = standard_algorithm(A, B, size);
 	print_result(A, B, C1, size);
 
 	multiplication = 0;
 	subtraction = 0;
 	addition = 0;
-	printf("===== divide-and-conquer algorithm =====\n");
+	printf("\n===== divide-and-conquer algorithm =====\n");
 	C2 = divide_and_conquer_algorithm(A, B, size);
 	print_result(A, B, C2, size);
 
 	multiplication = 0;
 	subtraction = 0;
 	addition = 0;
-	printf("===== strassen algorithm =====\n");
+	printf("\n===== strassen algorithm =====\n");
 //	strassen_algorithm(A, B, C, size);
 //	print_result(A, B, C, size);
+
+	free_matrix(A, size);
+	free_matrix(B, size);
+	free_matrix(C1, size);
+	free_matrix(C2, size);
 }
