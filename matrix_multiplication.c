@@ -114,23 +114,6 @@ int **divide_and_conquer_algorithm(int **A, int **B, int n){
 			}
 		}
 
-/*
-//  	memory leak??????
-		int **P1 = divide_and_conquer_algorithm(A11, B11, n / 2);
-		int **P2 = divide_and_conquer_algorithm(A12, B21, n / 2);
-		int **P3 = divide_and_conquer_algorithm(A11, B12, n / 2);
-		int **P4 = divide_and_conquer_algorithm(A12, B22, n / 2);
-		int **P5 = divide_and_conquer_algorithm(A21, B11, n / 2);
-		int **P6 = divide_and_conquer_algorithm(A22, B21, n / 2);
-		int **P7 = divide_and_conquer_algorithm(A21, B12, n / 2);
-		int **P8 = divide_and_conquer_algorithm(A22, B22, n / 2);
-
-		int **C11 = add_matrix(P1, P2, n / 2);
-		int **C12 = add_matrix(P3, P4, n / 2);
-		int **C21 = add_matrix(P5, P6, n / 2);
-		int **C22 = add_matrix(P7, P8, n / 2);
-*/
-
 		int **C11 = add_matrix(divide_and_conquer_algorithm(A11, B11, n / 2), divide_and_conquer_algorithm(A12, B21, n / 2), n / 2);
 		int **C12 = add_matrix(divide_and_conquer_algorithm(A11, B12, n / 2), divide_and_conquer_algorithm(A12, B22, n / 2), n / 2);
 		int **C21 = add_matrix(divide_and_conquer_algorithm(A21, B11, n / 2), divide_and_conquer_algorithm(A22, B21, n / 2), n / 2);
@@ -169,22 +152,9 @@ int **divide_and_conquer_algorithm(int **A, int **B, int n){
 		free_matrix(C12, n / 2);
 		free_matrix(C21, n / 2);
 		free_matrix(C22, n / 2);
-
-/*
-		free_matrix(P1, n / 2);
-		free_matrix(P2, n / 2);
-		free_matrix(P3, n / 2);
-		free_matrix(P4, n / 2);
-		free_matrix(P5, n / 2);
-		free_matrix(P6, n / 2);
-		free_matrix(P7, n / 2);
-		free_matrix(P8, n / 2);
-*/
-
 		return C;
 	}
 }
-
 
 int **strassen_algorithm(int **A, int **B, int n){
 	int **C = create_matrix(n);

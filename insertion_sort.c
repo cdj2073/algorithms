@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define SIZE 100
+
 int count;
 
 void insertion_sort(int arr[], int n){
@@ -16,14 +18,6 @@ void insertion_sort(int arr[], int n){
 			else
 				break;
 		}
-		/*
-		j = i - 1;
-		while (j >= 0 && arr[j] > key){
-			arr[j + 1] = arr[j];
-			j--;
-			count++;
-		}
-		*/
 		arr[j + 1] = key;
 	}
 }
@@ -35,33 +29,33 @@ void print_arr(int arr[], int size){
 }
 
 void sorted_arr(int A[]){
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < SIZE; i++)
 		A[i] = i + 1;
 }
 
 void reversely_sorted_arr(int A[]){
-	for (int i = 0; i < 100; i++)
-		A[i] = 100 - i;
+	for (int i = 0; i < SIZE; i++)
+		A[i] = SIZE - i;
 }
 
 void test(int A[]){
 	printf("before : ");
-	print_arr(A, 100);
+	print_arr(A, SIZE);
 
-	insertion_sort(A, 100);
+	insertion_sort(A, SIZE);
 
 	printf("after : ");
-	print_arr(A, 100);
+	print_arr(A, SIZE);
 
 	printf("The number of comparisons : %d\n\n", count);
 }
 
 int main(){
-	int A[100];
+	int A[SIZE];
 	
 	printf("===== test1 =====\n");
 	srand(time(NULL));
-	for (int i = 0; i < 100; i++){
+	for (int i = 0; i < SIZE; i++){
 		A[i] = rand()%1000;
 		for (int j = 0; j < i; j++){
 			if (A[i] == A[j]){

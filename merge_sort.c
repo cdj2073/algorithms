@@ -15,11 +15,9 @@ void merge(int arr[], int left, int mid, int right){
 	while (i <= mid && j <= right){
 		if (arr[i] >= arr[j]){
 			sorted[k++] = arr[i++];
-//			count++;
 		}
 		else{
 			sorted[k++] = arr[j++];
-//			count++;
 		}
 		count++;
 	}
