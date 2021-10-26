@@ -58,7 +58,32 @@ void right_rotate(Node **root, Node *x) {
 	y->right = x;
 	x->p = y;
 }
+void print_node(Node *node, int depth) {
+	char color;
+	if (node->color == RED)
+		color = 'R';
+	else
+		color = 'B';
 
+	if (node != NIL) {
+		print_node(node->left, depth + 1);
+
+		for (int i = 0; i < depth; i++)
+			printf("\t");
+		printf("%d [%c]\n", node->key, color);
+		
+		print_node(node->right, depth + 1);
+	}
+	else {
+		for (int i = 0; i < depth; i++)
+			printf("\t");
+		printf("nil\n");
+	}
+}
+
+void print_bst(Node **root) {
+	print_node(*root, 0);
+}
 void rb_insert_fixup(Node **root, Node *z) {
 	Node *y;
 
@@ -130,18 +155,20 @@ void rb_insert(Node **root, int k) {
 	{
 		y->left = z;
 		count++;
-		printf("%d insert left %d\n",count, z->key);
+		printf("%d insert left(%d) %d\n",count,y->key, z->key);
 	}
 	else
 	{
 		y->right = z;
 		count++;
-		printf("%d insert right %d\n",count, z->key);
+		printf("%d insert right(%d) %d\n",count,y->key, z->key);
 	}
-	
-	rb_insert_fixup(root, z);
-}
 
+	rb_insert_fixup(root, z);
+	print_bst(root);
+	printf("========================================\n");
+}
+/*
 void print_node(Node *node, int depth) {
 	char color;
 	if (node->color == RED)
@@ -151,9 +178,11 @@ void print_node(Node *node, int depth) {
 
 	if (node != NIL) {
 		print_node(node->left, depth + 1);
+
 		for (int i = 0; i < depth; i++)
 			printf("\t");
 		printf("%d [%c]\n", node->key, color);
+		
 		print_node(node->right, depth + 1);
 	}
 	else {
@@ -166,7 +195,7 @@ void print_node(Node *node, int depth) {
 void print_bst(Node **root) {
 	print_node(*root, 0);
 }
-
+*/
 int main() {
 	int A[SIZE];
 	srand(time(NULL));
@@ -190,11 +219,8 @@ int main() {
 	NIL->color = BLACK;
 	root = NIL;
 
-	for (int i = 0; i < SIZE; i++){
+	for (int i = 0; i < SIZE; i++)
 		rb_insert(&root, A[i]);
-		print_bst(&root);
-		printf("===========================\n");
-	}
 	
 	print_bst(&root);
 	return 0;
