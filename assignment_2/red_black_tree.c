@@ -20,7 +20,6 @@ typedef struct Tree {
 } Tree;
 
 Node *NIL;
-//void print_bst(Tree *);
 
 Tree *create_tree() {
 	Tree *T = (Tree *)malloc(sizeof(Tree));
@@ -28,6 +27,8 @@ Tree *create_tree() {
 	NIL->color = BLACK;
 	T->nil = NIL;
 	T->root = T->nil;
+
+	return T;
 }
 
 Node *create_node(Tree *T, int k) {
@@ -128,7 +129,6 @@ void rb_insert_fixup(Tree *T, Node *z) {
 // count
 int count = 0;
 void rb_insert(Tree *T, int k) {
-	// key가 tree에 있을때는 삽입 x
     if (rb_search(T->root, k) != T->nil){
         printf("Key %d is already in the tree!\n", k);
         return;
@@ -166,8 +166,6 @@ void rb_insert(Tree *T, int k) {
 	}
 
 	rb_insert_fixup(T, z);
-//	print_bst(T);
-//	printf("========================================\n");
 }
 
 Node *tree_successor(Node *x) {
