@@ -94,7 +94,7 @@ void print_table(Node *table) {
 	avg_probes /= SIZE;
 
 	printf("The average number of probes is %f\n", avg_probes);
-	printf("The primary cluster length is %d\n", max);
+	printf("The primary cluster length is %d\n\n", max);
 }
 
 int main() {

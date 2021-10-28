@@ -47,7 +47,7 @@ void print_list(Node *head){
 void print_table(List *table) {
     int shortest = m;
     int longest = 0;
-    int avg = 0;
+    float avg = 0;
     for (int i = 0; i < m; i++){
         printf("BUCKET[%d]\n", i);
         print_list(table[i].head);
@@ -61,7 +61,7 @@ void print_table(List *table) {
     avg /= m;
     printf("The shortest length of the chains is %d\n", shortest);
     printf("The longest length of the chains is %d\n", longest);
-    printf("The average length of the chains is %d\n", avg);
+    printf("The average length of the chains is %f\n", avg);
 }
 
 List *init_table(int m) {

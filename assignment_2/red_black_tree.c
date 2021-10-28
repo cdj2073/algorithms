@@ -31,13 +31,13 @@ Tree *create_tree() {
 	return T;
 }
 
-Node *create_node(Tree *T, int k) {
+Node *create_node(int k) {
 	Node *z = (Node *)malloc(sizeof(Node));
 	z->key = k;
 	z->color = RED;
-	z->p = T->nil;
-	z->left = T->nil;
-	z->right = T->nil;
+	z->p = NIL;
+	z->left = NIL;
+	z->right = NIL;
 	
 	return z;
 }
@@ -126,17 +126,15 @@ void rb_insert_fixup(Tree *T, Node *z) {
 }
 
 
-// count
-int count = 0;
-void rb_insert(Tree *T, int k) {
-    if (rb_search(T->root, k) != T->nil){
-        printf("Key %d is already in the tree!\n", k);
+void rb_insert(Tree *T, Node *z) {
+    if (rb_search(T->root, z->key) != T->nil){
+        printf("Key %d is already in the tree!\n", z->key);
+        free(z);
         return;
     }
 
 	Node *x = T->root;
     Node *y = T->nil;
-	Node *z = create_node(T, k);
 
 	while (x != T->nil) {
 		y = x;
@@ -147,23 +145,11 @@ void rb_insert(Tree *T, int k) {
 	}
 	z->p = y;
 	if (y == T->nil)
-	{
 		T->root = z;
-		count++;
-		printf("%d insert root %d\n",count, T->root->key);
-	}
 	else if (z->key < y->key)
-	{
 		y->left = z;
-		count++;
-		printf("%d insert left(%d) %d\n",count,y->key, z->key);
-	}
 	else
-	{
 		y->right = z;
-		count++;
-		printf("%d insert right(%d) %d\n",count,y->key, z->key);
-	}
 
 	rb_insert_fixup(T, z);
 }
@@ -243,10 +229,9 @@ void rb_delete_fixup(Tree *T, Node *x) {
     x->color = BLACK;
 }
 
-void rb_delete(Tree *T, int k) {
-    Node *z = rb_search(T->root, k);
+void rb_delete(Tree *T, Node *z) {
     if (z == T->nil) {
-        printf("Key %d is not in the tree!\n", k);
+        printf("Key %d is not in the tree!\n", z->key);
         return;
     }
 
@@ -268,7 +253,6 @@ void rb_delete(Tree *T, int k) {
         y->p->right = x;
     if (y != z) {
         z->key = y->key;
-        // copy y's satellite data into z
         z->color = y->color;
     }
     if (y->color == BLACK)
@@ -287,16 +271,24 @@ void print_node(Node *node, int depth) {
 		
 		print_node(node->left, depth + 1);
 	}
-//	else {
-//		for (int i = 0; i < depth; i++)
-//			printf("\t");
-//		printf("NIL\n");
-//	}
+	else {
+		for (int i = 0; i < depth; i++)
+			printf("\t");
+		printf("NIL\n");
+	}
 }
 
 void print_bst(Tree *T) {
 	print_node(T->root, 0);
     printf("\n");
+}
+
+void free_tree(Node *z) {
+	if (z != NIL) {
+		free_tree(z->left);
+		free_tree(z->right);
+		free(z);
+	}
 }
 
 int main() {
@@ -315,56 +307,56 @@ int main() {
 	printf("A : ");
 	for (int i = 0; i < SIZE; i++)
 		printf("%d ", A[i]);
-	printf("\n\n");
+	printf("\n");
 
 	Tree *T = create_tree();
 
     // insert keys in A and print
 	for (int i = 0; i < SIZE; i++)
-		rb_insert(T, A[i]);
+		rb_insert(T, create_node(A[i]));
 	print_bst(T);
 
     // insert 33, 12, 27, 41, 25
     printf("===== RB-INSERT(T, 33) =====\n");
-    rb_insert(T, 33);
+    rb_insert(T, create_node(33));
     print_bst(T);
 
     printf("===== RB-INSERT(T, 12) =====\n");
-    rb_insert(T, 12);
+    rb_insert(T, create_node(12));
     print_bst(T);
 
     printf("===== RB-INSERT(T, 27) =====\n");
-    rb_insert(T, 27);
+    rb_insert(T, create_node(27));
     print_bst(T);
 
     printf("===== RB-INSERT(T, 41) =====\n");
-    rb_insert(T, 41);
+    rb_insert(T, create_node(41));
     print_bst(T);
 
     printf("===== RB-INSERT(T, 25) =====\n");
-    rb_insert(T, 25);
+    rb_insert(T, create_node(25));
     print_bst(T);
 
 
     // delete 41, 27, 25, 12, 33
     printf("===== RB-DELETE(T, 41) =====\n");
-    rb_delete(T, 41);
+    rb_delete(T, rb_search(T->root, 41));
     print_bst(T);
 
     printf("===== RB-DELETE(T, 27) =====\n");
-    rb_delete(T, 27);
+    rb_delete(T, rb_search(T->root, 27));
     print_bst(T);
 
     printf("===== RB-DELETE(T, 25) =====\n");
-    rb_delete(T, 25);
+    rb_delete(T, rb_search(T->root, 25));
     print_bst(T);
 
     printf("===== RB-DELETE(T, 12) =====\n");
-    rb_delete(T, 12);
+    rb_delete(T, rb_search(T->root, 12));
     print_bst(T);
 
     printf("===== RB-DELETE(T, 33) =====\n");
-    rb_delete(T, 33);
+    rb_delete(T, rb_search(T->root, 33));
     print_bst(T);
 
 	return 0;
