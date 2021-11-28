@@ -112,6 +112,11 @@ void rb_insert(RBTree *T, RBNode *z) {
         return;
     }
 
+    // for total student's gpa
+    float total_gpa = T->avg_GPA * T->total_students + z->student_info->GPA;
+    T->total_students++;
+    T->avg_GPA = total_gpa / T->total_students;
+
 	RBNode *x = T->root;
     RBNode *y = T->nil;
 

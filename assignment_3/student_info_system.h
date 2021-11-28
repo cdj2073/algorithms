@@ -3,29 +3,30 @@
 #include <time.h>
 
 // Grade
-#define A_PLUS 4.5;
-#define A 4.0;
-#define B_PLUS 3.5;
-#define B 3.0;
-#define C_PLUS 2.5;
-#define C 2.0;
-#define D_PLUS 1.5;
-#define D 1.0;
-#define F 0;
+#define A_PLUS 4.5
+#define A 4.0
+#define B_PLUS 3.5
+#define B 3.0
+#define C_PLUS 2.5
+#define C 2.0
+#define D_PLUS 1.5
+#define D 1.0
+#define F 0
 
-enum Semester { SPRING, FALL };
-enum Color { RED, BLACK };
+
+typedef enum Semester { SPRING, FALL }Semester;
+typedef enum Color { RED, BLACK } Color;
 
 // data 채워넣기
 // courses - linked list
 typedef struct course_info {
-	struct course *prev;
-	struct course *next;
+	//struct course_info *prev;
+	struct course_info *next;
 	
 	int course_id;       // key
-	char course_code[7];
+	//char course_code[7];
 	int year;
-	int semester;
+	Semester semester;
 	int credits;
     float grade;
 } course_info;
@@ -64,6 +65,16 @@ typedef struct RBTree {
 
 RBTree *Tree;
 RBNode *NIL;
+
+void init_system();
+void print_student_info(int student_id);
+void insert_student_info(int student_id, int course_id, int year, Semester semester, int credits, float grade);
+
+
+// courses
+void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, int grade);
+void delete_course_info(course_info *lst, int id);
+void print_course_info(course_info *lst);
 
 // RB Tree
 RBTree *rb_create_tree();

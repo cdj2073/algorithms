@@ -2,6 +2,8 @@
 
 int main() {
     int input = -1;
+    srand(time(NULL));
+    init_system();
 
     while (input != 0) {
         int id;
