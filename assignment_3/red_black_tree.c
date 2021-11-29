@@ -108,7 +108,7 @@ void rb_insert_fixup(RBTree *T, RBNode *z) {
 void rb_insert(RBTree *T, RBNode *z) {
     if (rb_search(T->root, z->key) != T->nil){
         printf("Key %d is already in the tree!\n", z->key);
-        free(z);
+        rb_free_node(z);
         return;
     }
     // for total student's gpa
@@ -138,7 +138,7 @@ void rb_insert(RBTree *T, RBNode *z) {
 
 	rb_insert_fixup(T, z);
 
-    printf("*** rb-tree inserted (%d) ***\n", z->key);
+    printf("\n*** rb-tree inserted (%d) ***\n", z->key);
     rb_print_tree(Tree);
 }
 
@@ -159,8 +159,16 @@ RBNode *tree_successor(RBNode *x) {
     }
 }
 
-void free_rbnode(RBNode *z) {
-    free(z->student_info);
+void rb_free_node(RBNode *z) {
+    course_info *tmp = z->student_info->courses_head;
+    course_info *curr = tmp;
+    while (curr) {
+        curr = tmp->next;
+        free(tmp);
+        tmp = curr;
+    }
+    
+    //free(z->student_info);
     free(z);
 }
 
@@ -168,7 +176,7 @@ void free_tree(RBNode *z) {
 	if (z != NIL) {
 		free_tree(z->left);
 		free_tree(z->right);
-		free_rbnode(z);
+		rb_free_node(z);
 	}
 }
 
@@ -266,8 +274,8 @@ void rb_delete(RBTree *T, RBNode *z) {
     if (y->color == BLACK)
         rb_delete_fixup(T, x);
 
-    printf("*** rb-tree deleted (%d) ***\n", y->key);
-    free_rbnode(y);
+    printf("\n*** rb-tree deleted (%d) ***\n", y->key);
+    rb_free_node(y);
     rb_print_tree(Tree);
 }
 
@@ -276,14 +284,16 @@ void rb_print_node(RBNode *node, int depth, int *height) {
         *height = depth;
 	if (node != NIL) {
 		rb_print_node(node->right, depth + 1, height);
-		printf("%d\n", node->key);
+        printf("%d\n", node->key);
+		//printf("%d\t%.2f (%d)\n", node->key, node->student_info->GPA, node->student_info->credits);
 		rb_print_node(node->left, depth + 1, height);
 	}
 }
 
 void rb_print_tree(RBTree *T) {
     int height = 0;
+    int count = 0;
 	rb_print_node(T->root, 0, &height);
     printf("\n");
-    printf("Height : %d\n", height);
+    printf("=== # of nodes : %d, Height : %d ===\n", T->total_students, height);
 }

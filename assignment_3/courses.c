@@ -27,6 +27,16 @@ void print_grade(float grade) {
 	else printf("??");
 }
 
+course_info *search_course_info(course_info *lst, int course_id, int year, Semester semester) {
+	course_info *tmp = lst;
+	while (tmp->next) {
+		if (tmp->next->course_id == course_id && tmp->next->year == year && tmp->next->semester == semester)
+			return tmp->next;
+		tmp = tmp->next;
+	}
+	return NULL;
+}
+
 void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade) {
 	course_info *tmp = lst;
 	course_info *new_course = (course_info *)malloc(sizeof(course_info));
