@@ -4,7 +4,7 @@ int main() {
     int input = -1;
     srand(time(NULL));
     init_system();
-
+    printf("*** System Initialized ***\n");
     while (input != 0) {
         int id;
         printf("==================================\n");
@@ -42,7 +42,7 @@ int main() {
             // delete_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &id);
-            
+
             break;
         case 4:
             printf("===== Total students =====\n");
@@ -52,5 +52,6 @@ int main() {
             printf("\n!!! Wrong number! Please enter the number (0 ~ 3) !!!\n");
             break;
         }
+        printf("\n\n");
     }
 }

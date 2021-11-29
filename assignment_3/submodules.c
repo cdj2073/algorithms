@@ -19,6 +19,8 @@ void init_student(int student_id) {
         // for check duplicate course id (per semester)
         int *courses_id = (int *)malloc(sizeof(int) * course_num);
         for (int i = 0; i < course_num; i++) {
+            if (total_credits == GRADUATION)
+                return;
             courses_id[i] = rand()%10000;
             for (int j = 0; j < i; j++) {
                 if (courses_id[j] == courses_id[i]) {
@@ -28,6 +30,8 @@ void init_student(int student_id) {
             }
             
             int credits = rand()%3 + 1;
+            if (total_credits > GRADUATION - 3)
+                credits = GRADUATION - total_credits;
             float grade = rand()%10 / 2;
             if (grade <= 2.0)
                 grade = rand()%10 / 2;
@@ -67,7 +71,7 @@ void init_system() {
     int students_id[100];
     // randomly generate 100 students
     for (int i = 0; i < 100; i++) {
-        int enter_year = 2011 + rand()%11; // 2011 ~ 2021
+        int enter_year = 2012 + rand()%10; // 2012 ~ 2021
         students_id[i] = enter_year * 1000000 + 310000 + rand()%10000;
         for (int j = 0; j < i; j++) {
             if (students_id[i] == students_id[j]) { // duplicate student id
@@ -86,11 +90,11 @@ void print_student_info(int student_id) {
         return;
     }
     printf("===== Student (%d) =====\n", student_id);
-    printf("|   GPA : %f\n", student->student_info->GPA);
+    printf("|   GPA : %.2f\n", student->student_info->GPA);
     printf("|   Credits (Remaining Credits) : %d(%d)\n", student->student_info->credits, 140 - student->student_info->credits);
     // courses print
     print_course_info(student->student_info->courses_head);
-    printf("===== Total students : %d, GPA : %f =====\n\n", Tree->total_students, Tree->avg_GPA);
+    printf("===== Total students : %d, GPA : %.2f, avg credits : %.2f =====\n\n", Tree->total_students, Tree->avg_GPA, Tree->avg_credits);
 }
 
 void insert_student_info(int student_id, int course_id, int year, Semester semester, int credits, float grade) {

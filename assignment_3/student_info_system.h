@@ -13,6 +13,7 @@
 #define D 1.0
 #define F 0
 
+#define GRADUATION 140
 
 typedef enum Semester { SPRING, FALL }Semester;
 typedef enum Color { RED, BLACK } Color;
