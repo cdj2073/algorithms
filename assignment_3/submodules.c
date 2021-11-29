@@ -23,11 +23,13 @@ void init_student(int student_id) {
     while (year <= 2021) {
         int course_num = rand()%8;  // the number of courses (3 ~ 7)
         if (course_num < 3) {
-            if (semester == SPRING)
-                semester = FALL;
-            else {
-                semester = SPRING;
-                year++;
+            if (total_credits) {
+                if (semester == SPRING)
+                    semester = FALL;
+                else {
+                    semester = SPRING;
+                    year++;
+                }
             }
             continue;
         }
@@ -56,14 +58,13 @@ void init_student(int student_id) {
             total_credits += credits;
         }
         free(courses_id);
-        /*
         if (semester == SPRING)
             semester = FALL;
         else {
             semester = SPRING;
             year++;
         }
-        */
+        
     }
 
     // create student_info
@@ -88,7 +89,7 @@ void init_system() {
     int dup = 0, i = 0;
     // randomly generate 100 students
     for (i = 0; i < 100; i++) {
-        int enter_year = 2012 + rand()%10; // 2012 ~ 2021
+        int enter_year = 2011 + rand()%11; // 2012 ~ 2021
         if (enter_year < 2018)
             enter_year += rand()%5;
         students_id[i] = enter_year * 1000000 + 310000 + rand()%10000;
@@ -104,6 +105,7 @@ void init_system() {
         else
             init_student(students_id[i]);
     }
+
     // initial condition : avg credit hours (70 +- 5)
     while (Tree->avg_credits > 75) {
         students_id[i] = 2021310000 + rand()%10000;
@@ -134,26 +136,43 @@ void print_student_info(int student_id) {
 
 void insert_student_info(int student_id, int course_id, int year, Semester semester, int credits, float grade) {
     RBNode *student = rb_search(Tree->root, student_id);
-    if (student == NIL) {
+    if (student == NIL) {   // create new student
         student = rb_create_node(student_id);
         student->student_info = (student_info *)malloc(sizeof(student_info));
         student->student_info->student_id = student_id;
-        student->student_info->GPA = 0;
-        student->student_info->credits = 0;
         student->student_info->courses_head = (course_info *)malloc(sizeof(course_info));
+
+        // insert course info
+        insert_course_info(student->student_info->courses_head, course_id, year, semester, credits, grade);
+        // calculate gpa and credits
+        student->student_info->GPA = grade;
+        student->student_info->credits = credits;
+        
+        rb_insert(Tree, student);
     }
-    // insert course info
-    insert_course_info(student->student_info->courses_head, course_id, year, semester, credits, grade);
-    // calculate gpa and credits
-    float student_gpa = student->student_info->GPA * student->student_info->credits;
-    int student_credits = student->student_info->credits;
-    student_credits += credits;
-    student_gpa += grade * credits;
-    student_gpa /= credits;
-    student->student_info->GPA = student_gpa;
-    student->student_info->credits = student_credits;
-    
-    rb_insert(Tree, student);
+    else {
+        insert_course_info(student->student_info->courses_head, course_id, year, semester, credits, grade);
+        // calculate gpa and credits
+        float student_gpa = student->student_info->GPA * student->student_info->credits;
+        int student_credits = student->student_info->credits;
+        student_credits += credits;
+        student_gpa += grade * credits;
+        student_gpa /= student_credits;
+        
+        // total student's gpa and credits
+        float avg_gpa = Tree->avg_GPA * Tree->total_students;
+        float avg_credits = Tree->avg_credits * Tree->total_students;
+        avg_gpa -= student->student_info->GPA;
+        avg_gpa += student_gpa;
+        avg_gpa /= Tree->total_students;
+        avg_credits += credits;
+        avg_credits /= Tree->total_students;
+        
+        Tree->avg_GPA = avg_gpa;
+        Tree->avg_credits = avg_credits;
+        student->student_info->GPA = student_gpa;
+        student->student_info->credits = student_credits;
+    }
     print_student_info(student_id);
 }
 
@@ -162,15 +181,38 @@ void delete_student_info(int student_id, int course_id, int year, Semester semes
         printf("Delete student (%d)\n", student_id);
         print_student_info(student_id);
         rb_delete(Tree, rb_search(Tree->root, student_id));
+        printf("After delete\n");
+        printf("===== Total students : %d, GPA : %.2f, avg credits : %.2f\n", Tree->total_students, Tree->avg_GPA, Tree->avg_credits);
         return;
     }
     student_info *student = rb_search(Tree->root, student_id)->student_info;
     course_info *course = search_course_info(student->courses_head, course_id, year, semester);
     if (!course) {
-        printf("Student (%d) doesn't take the course (SWE%d)\n", student_id, course_id);
+        printf("Student (%d) doesn't take the course (SWE%d in %s, %d)\n", student_id, course_id, semester == SPRING ? "Spring" : "Fall", year);
         print_student_info(student_id);
     }
     else {
+        // calculate gpa and credits
+        float student_gpa = student->GPA * student->credits;
+        int student_credits = student->credits;
+        student_credits -= course->credits;
+        student_gpa -= course->grade * course->credits;
+        student_gpa /= student_credits;
+        
+        // total student's gpa and credits
+        float avg_gpa = Tree->avg_GPA * Tree->total_students;
+        float avg_credits = Tree->avg_credits * Tree->total_students;
+        avg_gpa -= student->GPA;
+        avg_gpa += student_gpa;
+        avg_gpa /= Tree->total_students;
+        avg_credits -= course->credits;
+        avg_credits /= Tree->total_students;
+        
+        Tree->avg_GPA = avg_gpa;
+        Tree->avg_credits = avg_credits;
+        student->GPA = student_gpa;
+        student->credits = student_credits;
+
         delete_course_info(student->courses_head, course_id, year, semester);
         printf("Delete course SWE%d\n", course_id);
         print_student_info(student_id);

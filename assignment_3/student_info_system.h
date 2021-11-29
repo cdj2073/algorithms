@@ -78,6 +78,7 @@ course_info *search_course_info(course_info *lst, int course_id, int year, Semes
 void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade);
 void delete_course_info(course_info *lst, int course_id, int year, Semester semester);
 void print_course_info(course_info *lst);
+int num_course(course_info *lst, int year, Semester semester);
 
 // RB Tree
 RBTree *rb_create_tree();

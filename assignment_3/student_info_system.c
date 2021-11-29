@@ -29,12 +29,20 @@ int main() {
             // print_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &student_id);
+            while (student_id <= 2011310000 || student_id >= 2021319999) {
+                printf("Please enter again : ");
+                scanf("%d", &student_id);
+            }
             print_student_info(student_id);
             break;
         case 2:
             // insert_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &student_id);
+            while (student_id <= 2011310000 || student_id >= 2021319999) {
+                printf("Please enter again : ");
+                scanf("%d", &student_id);
+            }
             RBNode *student = rb_search(Tree->root, student_id);
             if (student != NIL) {
                 if (student->student_info->credits == GRADUATION) {
@@ -55,7 +63,7 @@ int main() {
             printf("Please enter the year of that course : ");
             scanf("%d", &year);
             while (year > 2021 || year < student_id / 1000000) {
-                printf("Please enter again (%d ~ %d) : ", student_id / 1000000, year);
+                printf("Please enter again (%d ~ 2021) : ", student_id / 1000000);
                 scanf("%d", &year);
             }
             printf("Please enter the semester of that course (Spring : 0, Fall : 1) : ");
@@ -64,11 +72,23 @@ int main() {
                 printf("Please enter again (Spring : 0, Fall : 1) : ");
                 scanf("%d", (int *)&semester);
             }
-            if (student != NIL && search_course_info(student->student_info->courses_head, course_id, year, semester)) {
-                printf("\nAlready inserted courses\n");
-                print_student_info(student_id);
-                break;
+
+            if (student != NIL) {
+                // course id exist
+                if (search_course_info(student->student_info->courses_head, course_id, year, semester)) {
+                    printf("\nCourse SWE%d already inserted\n", course_id);
+                    print_student_info(student_id);
+                    break;
+                }
+
+                // max 7 courses per semester
+                if (num_course(student->student_info->courses_head, year, semester) == 7) {
+                    printf("\nMax 7 courses per semester\n");
+                    print_student_info(student_id);
+                    break;
+                }
             }
+            
             
             printf("Please enter the credits of that course (1 ~ 3) : ");
             scanf("%d", &credits);
@@ -89,6 +109,10 @@ int main() {
             // delete_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &student_id);
+            while (student_id <= 2011310000 || student_id >= 2021319999) {
+                printf("Please enter again : ");
+                scanf("%d", &student_id);
+            }
             if (rb_search(Tree->root, student_id) == NIL) {
                 rb_print_tree(Tree);
                 printf("\nThere is no student (%d)\n", student_id);
@@ -110,7 +134,7 @@ int main() {
                 printf("Please enter the year of that course : ");
                 scanf("%d", &year);
                 while (year > 2021 || year < student_id / 1000000) {
-                    printf("Please enter again (%d ~ %d) : ", student_id / 1000000, year);
+                    printf("Please enter again (%d ~ 2021) : ", student_id / 1000000);
                     scanf("%d", &year);
                 }
                 printf("Please enter the semester of that course (Spring : 0, Fall : 1) : ");

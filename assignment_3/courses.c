@@ -37,6 +37,22 @@ course_info *search_course_info(course_info *lst, int course_id, int year, Semes
 	return NULL;
 }
 
+int num_course(course_info *lst, int year, Semester semester) {
+	course_info *tmp = lst;
+	int num = 0;
+	while (tmp->next && tmp->next->year > year) {
+		tmp = tmp->next;
+	}
+	if (tmp->next->year == year && tmp->next->semester == semester) {
+		while (tmp->next && tmp->next->year == year && tmp->next->semester == semester) {
+			num++;
+			tmp = tmp->next;
+		}
+		return num;
+	}
+	return num;
+}
+
 void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade) {
 	course_info *tmp = lst;
 	course_info *new_course = (course_info *)malloc(sizeof(course_info));
@@ -51,8 +67,10 @@ void insert_course_info(course_info *lst, int course_id, int year, Semester seme
 
 	while (tmp->next && tmp->next->year > new_course->year)		
 		tmp = tmp->next;
-	while (tmp->next && tmp->semester > new_course->semester)
+	if (tmp->next && tmp->next->year == year) {
+		while (tmp->next && tmp->next->semester > new_course->semester)
 		tmp = tmp->next;
+	}
 	new_course->next = tmp->next;
 	tmp->next = new_course;
 }
