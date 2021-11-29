@@ -1,20 +1,11 @@
 #include "student_info_system.h"
 
-/*
-int random_value(int range) {
-    srand(time(NULL));
-    return rand()%range;
-}
-*/
-
 // Initialize the system with random values
-void init_student() {
-    int enter_year, student_id, course_id, total_credits = 0;
-    
+void init_student(int student_id) {
+    int enter_year, course_id, total_credits = 0;
     float gpa = 0;
 
-    enter_year = 2011 + rand()%11;
-    student_id = enter_year * 1000000 + 310000 + rand()%10000;
+    enter_year = student_id / 1000000;
 
     // course information generate
     course_info *head = (course_info *)malloc(sizeof(course_info));
@@ -24,18 +15,29 @@ void init_student() {
         int course_num = rand()%8;  // the number of courses (3 ~ 7)
         if (course_num < 3)
             continue;
+        
+        // for check duplicate course id (per semester)
+        int *courses_id = (int *)malloc(sizeof(int) * course_num);
         for (int i = 0; i < course_num; i++) {
+            courses_id[i] = rand()%10000;
+            for (int j = 0; j < i; j++) {
+                if (courses_id[j] == courses_id[i]) {
+                    i--;
+                    break;
+                }
+            }
+            
             int credits = rand()%3 + 1;
-            int course_id = rand()%10000;
             float grade = rand()%10 / 2;
             if (grade <= 2.0)
                 grade = rand()%10 / 2;
             while (grade == 0.5)
                 grade = rand()%10 / 2;
-            insert_course_info(head, course_id, year, semester, credits, grade);
+            insert_course_info(head, courses_id[i], year, semester, credits, grade);
             gpa += grade * credits;
             total_credits += credits;
         }
+        free(courses_id);
         if (semester == SPRING)
             semester = FALL;
         else {
@@ -62,16 +64,24 @@ void init_student() {
 void init_system() {
     Tree = rb_create_tree();
     
+    int students_id[100];
     // randomly generate 100 students
     for (int i = 0; i < 100; i++) {
-        init_student();
+        int enter_year = 2011 + rand()%11; // 2011 ~ 2021
+        students_id[i] = enter_year * 1000000 + 310000 + rand()%10000;
+        for (int j = 0; j < i; j++) {
+            if (students_id[i] == students_id[j]) { // duplicate student id
+                i--;
+                break;
+            }
+        }
+        init_student(students_id[i]);
     }
-
 }
 
 void print_student_info(int student_id) {
     RBNode *student = rb_search(Tree->root, student_id);
-    if (!student) {
+    if (student == Tree->nil) {
         printf("There is no student (%d).\n", student_id);
         return;
     }
@@ -93,4 +103,8 @@ void insert_student_info(int student_id, int course_id, int year, Semester semes
     // insert course info
     // calculate gpa
     // add credits
+}
+
+void delete_student_info() {
+
 }

@@ -111,10 +111,11 @@ void rb_insert(RBTree *T, RBNode *z) {
         free(z);
         return;
     }
-
     // for total student's gpa
+    float total_credits = T->avg_credits * T->total_students + z->student_info->credits;
     float total_gpa = T->avg_GPA * T->total_students + z->student_info->GPA;
     T->total_students++;
+    T->avg_credits = total_credits / T->total_students;
     T->avg_GPA = total_gpa / T->total_students;
 
 	RBNode *x = T->root;
@@ -136,6 +137,9 @@ void rb_insert(RBTree *T, RBNode *z) {
 		y->right = z;
 
 	rb_insert_fixup(T, z);
+
+    printf("*** rb-tree inserted (%d) ***\n", z->key);
+    rb_print_tree(Tree);
 }
 
 RBNode *tree_successor(RBNode *x) {
@@ -232,6 +236,13 @@ void rb_delete(RBTree *T, RBNode *z) {
         return;
     }
 
+    // for total student's gpa
+    float total_credits = T->avg_credits * T->total_students - z->student_info->credits;
+    float total_gpa = T->avg_GPA * T->total_students - z->student_info->GPA;
+    T->total_students--;
+    T->avg_credits = total_credits / T->total_students;
+    T->avg_GPA = total_gpa / T->total_students;
+
     RBNode *x, *y;
     if (z->left == T->nil || z->right == T->nil)
         y = z;
@@ -255,28 +266,24 @@ void rb_delete(RBTree *T, RBNode *z) {
     if (y->color == BLACK)
         rb_delete_fixup(T, x);
 
+    printf("*** rb-tree deleted (%d) ***\n", y->key);
     free_rbnode(y);
+    rb_print_tree(Tree);
 }
 
-void rb_print_node(RBNode *node, int depth) {
+void rb_print_node(RBNode *node, int depth, int *height) {
+    if (*height < depth)
+        *height = depth;
 	if (node != NIL) {
-		rb_print_node(node->right, depth + 1);
-
-		for (int i = 0; i < depth; i++)
-			printf("\t");
-        char color = (node->color == RED) ? 'R' : 'B';
-		printf("%d [%c]\n", node->key, color);
-		
-		rb_print_node(node->left, depth + 1);
-	}
-	else {
-		for (int i = 0; i < depth; i++)
-			printf("\t");
-		printf("NIL\n");
+		rb_print_node(node->right, depth + 1, height);
+		printf("%d\n", node->key);
+		rb_print_node(node->left, depth + 1, height);
 	}
 }
 
 void rb_print_tree(RBTree *T) {
-	rb_print_node(T->root, 0);
+    int height = 0;
+	rb_print_node(T->root, 0, &height);
     printf("\n");
+    printf("Height : %d\n", height);
 }

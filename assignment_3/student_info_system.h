@@ -61,6 +61,7 @@ typedef struct RBTree {
     // total students
     int total_students;
     float avg_GPA;
+    float avg_credits;
 } RBTree;
 
 RBTree *Tree;
