@@ -1,5 +1,14 @@
 #include "student_info_system.h"
 
+float get_random_grade() {
+    float grade = rand()%10 / 2.0;
+    if (grade <= 2.5)
+        grade = rand()%10 / 2.0;
+    while (grade == 0.5)
+        grade = rand()%10 / 2.0;
+    return grade;
+}
+
 // Initialize the system with random values
 void init_student(int student_id) {
     int enter_year, course_id, total_credits = 0;
@@ -32,11 +41,7 @@ void init_student(int student_id) {
             int credits = rand()%3 + 1;
             if (total_credits > GRADUATION - 3)
                 credits = GRADUATION - total_credits;
-            float grade = rand()%10 / 2;
-            if (grade <= 2.0)
-                grade = rand()%10 / 2;
-            while (grade == 0.5)
-                grade = rand()%10 / 2;
+            float grade = get_random_grade();
             insert_course_info(head, courses_id[i], year, semester, credits, grade);
             gpa += grade * credits;
             total_credits += credits;
@@ -92,6 +97,7 @@ void print_student_info(int student_id) {
     printf("===== Student (%d) =====\n", student_id);
     printf("|   GPA : %.2f\n", student->student_info->GPA);
     printf("|   Credits (Remaining Credits) : %d(%d)\n", student->student_info->credits, 140 - student->student_info->credits);
+    printf("|\n");
     // courses print
     print_course_info(student->student_info->courses_head);
     printf("===== Total students : %d, GPA : %.2f, avg credits : %.2f =====\n\n", Tree->total_students, Tree->avg_GPA, Tree->avg_credits);

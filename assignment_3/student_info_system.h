@@ -74,7 +74,7 @@ void insert_student_info(int student_id, int course_id, int year, Semester semes
 
 
 // courses
-void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, int grade);
+void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade);
 void delete_course_info(course_info *lst, int id);
 void print_course_info(course_info *lst);
 

@@ -27,7 +27,7 @@ void print_grade(float grade) {
 	else printf("??");
 }
 
-void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, int grade) {
+void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade) {
 	course_info *tmp = lst;
 	course_info *new_course = (course_info *)malloc(sizeof(course_info));
 	//new_course->prev = NULL;
