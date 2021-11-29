@@ -71,12 +71,12 @@ RBNode *NIL;
 void init_system();
 void print_student_info(int student_id);
 void insert_student_info(int student_id, int course_id, int year, Semester semester, int credits, float grade);
-void delete_student_info(int student_id, int course_id);
+void delete_student_info(int student_id, int course_id, int year, Semester semester);
 
 // courses
 course_info *search_course_info(course_info *lst, int course_id, int year, Semester semester);
 void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade);
-void delete_course_info(course_info *lst, int id);
+void delete_course_info(course_info *lst, int course_id, int year, Semester semester);
 void print_course_info(course_info *lst);
 
 // RB Tree

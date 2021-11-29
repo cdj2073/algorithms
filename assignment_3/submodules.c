@@ -37,7 +37,7 @@ void init_student(int student_id) {
         for (int i = 0; i < course_num; i++) {
             if (total_credits == GRADUATION)
                 break;
-            courses_id[i] = rand()%10000;
+            courses_id[i] = rand()%9999 + 1;
             for (int j = 0; j < i; j++) {
                 if (courses_id[j] == courses_id[i]) {
                     i--;
@@ -157,9 +157,22 @@ void insert_student_info(int student_id, int course_id, int year, Semester semes
     print_student_info(student_id);
 }
 
-void delete_student_info(int student_id, int course_id) {
+void delete_student_info(int student_id, int course_id, int year, Semester semester) {
     if (course_id == 0) {
+        printf("Delete student (%d)\n", student_id);
+        print_student_info(student_id);
         rb_delete(Tree, rb_search(Tree->root, student_id));
         return;
+    }
+    student_info *student = rb_search(Tree->root, student_id)->student_info;
+    course_info *course = search_course_info(student->courses_head, course_id, year, semester);
+    if (!course) {
+        printf("Student (%d) doesn't take the course (SWE%d)\n", student_id, course_id);
+        print_student_info(student_id);
+    }
+    else {
+        delete_course_info(student->courses_head, course_id, year, semester);
+        printf("Delete course SWE%d\n", course_id);
+        print_student_info(student_id);
     }
 }

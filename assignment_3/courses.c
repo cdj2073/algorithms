@@ -57,12 +57,12 @@ void insert_course_info(course_info *lst, int course_id, int year, Semester seme
 	tmp->next = new_course;
 }
 
-void delete_course_info(course_info *lst, int id) {
+void delete_course_info(course_info *lst, int course_id, int year, Semester semester) {
 	course_info *prevNode = lst;
 	course_info *curNode = lst->next;
 
 	while (curNode){
-		if (curNode->course_id == id){
+		if (curNode->course_id == course_id && curNode->year == year && curNode->semester == semester){
 			prevNode->next = curNode->next;
 			free(curNode);
 			curNode = prevNode->next;
