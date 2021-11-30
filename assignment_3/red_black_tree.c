@@ -111,6 +111,7 @@ void rb_insert(RBTree *T, RBNode *z) {
         rb_free_node(z);
         return;
     }
+
     // for total student's gpa
     float total_credits = T->avg_credits * T->total_students + z->student_info->credits;
     float total_gpa = T->avg_GPA * T->total_students + z->student_info->GPA;
@@ -138,6 +139,7 @@ void rb_insert(RBTree *T, RBNode *z) {
 
 	rb_insert_fixup(T, z);
 
+    // print tree
     printf("\n*** rb-tree inserted (%d) ***\n", z->key);
     rb_print_tree(Tree);
 }
@@ -168,7 +170,7 @@ void rb_free_node(RBNode *z) {
         tmp = curr;
     }
     
-    //free(z->student_info);
+    free(z->student_info);
     free(z);
 }
 
@@ -274,6 +276,7 @@ void rb_delete(RBTree *T, RBNode *z) {
     if (y->color == BLACK)
         rb_delete_fixup(T, x);
 
+    // print tree
     printf("\n*** rb-tree deleted (%d) ***\n", y->key);
     rb_free_node(y);
     rb_print_tree(Tree);

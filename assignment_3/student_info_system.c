@@ -5,6 +5,7 @@ int main() {
     srand(time(NULL));
     init_system();
     printf("*** System Initialized ***\n");
+
     while (input != 0) {
         int student_id, course_id, year, credits;
         Semester semester;
@@ -23,6 +24,9 @@ int main() {
         switch (input)
         {
         case 0:
+            free_tree(Tree->root);
+            free(NIL);
+            free(Tree);
             exit(0);
             break;
         case 1:
@@ -88,7 +92,6 @@ int main() {
                     break;
                 }
             }
-            
             
             printf("Please enter the credits of that course (1 ~ 3) : ");
             scanf("%d", &credits);
@@ -156,9 +159,4 @@ int main() {
         }
         printf("\n\n");
     }
-    free_tree(Tree->root);
-    free(NIL);
-    free(Tree);
-    Tree = NULL;
-    printf("bbbbbbbbbbbbbbbbbb\n");
 }

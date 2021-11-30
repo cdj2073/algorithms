@@ -2,9 +2,8 @@
 
 course_info *create_course(int course_id, int year, Semester semester, int credits, int grade) {
 	course_info *course = (course_info *)malloc(sizeof(course_info));
-	//course->prev = NULL;
-	course->next = NULL;
-	
+
+	course->next = NULL;	
 	course->course_id = course_id;
 	course->year = year;
 	course->semester = semester;
@@ -24,7 +23,6 @@ void print_grade(float grade) {
 	else if (grade == D_PLUS)printf("D+");
 	else if (grade == D) printf("D");
 	else if (grade == F) printf("F");
-	else printf("??");
 }
 
 course_info *search_course_info(course_info *lst, int course_id, int year, Semester semester) {
@@ -56,9 +54,8 @@ int num_course(course_info *lst, int year, Semester semester) {
 void insert_course_info(course_info *lst, int course_id, int year, Semester semester, int credits, float grade) {
 	course_info *tmp = lst;
 	course_info *new_course = (course_info *)malloc(sizeof(course_info));
-	//new_course->prev = NULL;
-	new_course->next = NULL;
-	
+
+	new_course->next = NULL;	
 	new_course->course_id = course_id;
 	new_course->year = year;
 	new_course->semester = semester;
@@ -94,13 +91,14 @@ void delete_course_info(course_info *lst, int course_id, int year, Semester seme
 void print_course_info(course_info *lst) {
 	int n = 0;
 	course_info *curNode = lst->next;
-	int year = curNode->year;
 	Semester semester = curNode->semester;
+	int year = curNode->year;
 	printf("|	Courses\n");
 
 	while (curNode) {
 		float gpa = 0;
 		int credits = 0;
+		
 		printf("|	===== %s, %d =====\n", curNode->semester == SPRING ? "Spring" : "Fall", year);
 		while (curNode && curNode->year == year && curNode->semester == semester) {
 			printf("|	SWE%04d (%d)	: ", curNode->course_id, curNode->credits);
