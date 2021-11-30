@@ -29,7 +29,7 @@ int main() {
             // print_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &student_id);
-            while (student_id <= 2011310000 || student_id >= 2021319999) {
+            while (student_id / 1000000000 == 0 || student_id / 1000000000 > 9) {
                 printf("Please enter again : ");
                 scanf("%d", &student_id);
             }
@@ -39,7 +39,7 @@ int main() {
             // insert_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &student_id);
-            while (student_id <= 2011310000 || student_id >= 2021319999) {
+            while (student_id / 1000000000 == 0 || student_id / 1000000000 > 9) {
                 printf("Please enter again : ");
                 scanf("%d", &student_id);
             }
@@ -109,7 +109,7 @@ int main() {
             // delete_student_info();
             printf("Please enter the student ID : ");
             scanf("%d", &student_id);
-            while (student_id <= 2011310000 || student_id >= 2021319999) {
+            while (student_id / 1000000000 == 0 || student_id / 1000000000 > 9) {
                 printf("Please enter again : ");
                 scanf("%d", &student_id);
             }

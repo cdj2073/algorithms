@@ -89,7 +89,7 @@ void init_system() {
     int dup = 0, i = 0;
     // randomly generate 100 students
     for (i = 0; i < 100; i++) {
-        int enter_year = 2011 + rand()%11; // 2012 ~ 2021
+        int enter_year = 2011 + rand()%11; // 2011 ~ 2021
         if (enter_year < 2018)
             enter_year += rand()%5;
         students_id[i] = enter_year * 1000000 + 310000 + rand()%10000;

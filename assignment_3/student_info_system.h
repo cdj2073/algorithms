@@ -18,14 +18,11 @@
 typedef enum Semester { SPRING, FALL }Semester;
 typedef enum Color { RED, BLACK } Color;
 
-// data 채워넣기
 // courses - linked list
 typedef struct course_info {
-	//struct course_info *prev;
 	struct course_info *next;
 	
-	int course_id;       // key
-	//char course_code[7];
+	int course_id;
 	int year;
 	Semester semester;
 	int credits;
@@ -45,14 +42,8 @@ typedef struct RBNode {
 	struct RBNode *left;
 	struct RBNode *right;
 
-    // student info
     int key;
     struct student_info *student_info;
-    //int student_id;
-    //float total_GPA;
-    //int credits;    // 취득 학점
-//    int remaining_credits;   // 잔여 학점
-    //struct courses *courses_head;
 } RBNode;
 
 typedef struct RBTree {

@@ -84,6 +84,7 @@ void delete_course_info(course_info *lst, int course_id, int year, Semester seme
 			prevNode->next = curNode->next;
 			free(curNode);
 			curNode = prevNode->next;
+			return;
 		}
 		prevNode = prevNode->next;
 		curNode = curNode->next;

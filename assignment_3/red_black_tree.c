@@ -285,7 +285,6 @@ void rb_print_node(RBNode *node, int depth, int *height) {
 	if (node != NIL) {
 		rb_print_node(node->right, depth + 1, height);
         printf("%d\n", node->key);
-		//printf("%d\t%.2f (%d)\n", node->key, node->student_info->GPA, node->student_info->credits);
 		rb_print_node(node->left, depth + 1, height);
 	}
 }
